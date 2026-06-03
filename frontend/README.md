@@ -9,6 +9,12 @@ npm install
 npm run dev
 ```
 
-The dev server defaults to `http://127.0.0.1:3000`.
+The dev server is fixed to `http://localhost:5175`.
 
-Set `VITE_API_BASE_URL` if the backend is not running at `http://127.0.0.1:8000`.
+The backend API URL is configured in `.env.local`:
+
+```text
+VITE_API_BASE_URL=http://127.0.0.1:8011
+```
+
+Copy `.env.example` to `.env.local` if the file is missing.

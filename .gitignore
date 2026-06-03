@@ -3,6 +3,9 @@ __pycache__/
 .pytest_cache/
 .venv/
 word_qa.db
+.env.local
+frontend/.env.local
+docs/IND-word-QA-source.zip
 storage/projects/*/original/
 storage/projects/*/exports/
 

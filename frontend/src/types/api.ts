@@ -42,3 +42,27 @@ export type QAIssue = {
   created_at: string;
   updated_at: string;
 };
+
+export type HealthStatus = {
+  status: string;
+  service: string;
+  port: number;
+  database: {
+    status: string;
+    url?: string;
+    error?: string | null;
+  };
+  upload_storage: {
+    path: string;
+    exists: boolean;
+    is_directory: boolean;
+    writable: boolean;
+    error?: string | null;
+  };
+  ai_api_key: {
+    required: boolean;
+    present: boolean;
+  };
+  version: string;
+  timestamp: string;
+};

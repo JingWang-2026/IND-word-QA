@@ -16,7 +16,14 @@ client = TestClient(app)
 def test_health_returns_ok() -> None:
     response = client.get("/health")
     assert response.status_code == 200
-    assert response.json() == {"status": "ok"}
+    data = response.json()
+    assert data["status"] == "ok"
+    assert data["service"] == "Word Report QA Assistant"
+    assert data["port"] == 8011
+    assert data["database"]["status"] == "connected"
+    assert data["upload_storage"]["writable"] is True
+    assert data["version"]
+    assert data["timestamp"]
 
 
 def test_project_crud_and_docx_upload() -> None:

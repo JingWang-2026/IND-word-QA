@@ -1,0 +1,14 @@
+{
+  "name": "ind-word-qa",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "powershell -ExecutionPolicy Bypass -File scripts/start-local.ps1",
+    "check": "node scripts/check-local.mjs all",
+    "check:ports": "node scripts/check-local.mjs ports",
+    "check:health": "node scripts/check-local.mjs health",
+    "test:smoke": "node scripts/smoke-test.mjs",
+    "clear:test-data": "python scripts/clear-local-data.py --yes"
+  }
+}

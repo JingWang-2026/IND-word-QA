@@ -17,13 +17,13 @@ storage/   Local uploaded files and future exports
 ```powershell
 cd backend
 pip install -r requirements.txt
-uvicorn app.main:app --reload
+python -m uvicorn app.main:app --host 127.0.0.1 --port 8011
 ```
 
 Health check:
 
 ```powershell
-Invoke-WebRequest http://127.0.0.1:8000/health
+Invoke-WebRequest http://127.0.0.1:8011/health
 ```
 
 ## Frontend
@@ -34,7 +34,49 @@ npm install
 npm run dev
 ```
 
-Open `http://127.0.0.1:3000`.
+Open `http://localhost:5175`.
+
+The frontend reads its backend URL from `frontend/.env.local`:
+
+```text
+VITE_API_BASE_URL=http://127.0.0.1:8011
+```
+
+## Fixed Local Ports
+
+```text
+Software: Word Report QA Assistant
+Frontend: http://localhost:5175
+Backend:  http://127.0.0.1:8011
+Database: SQLite local file, no network port
+API base: http://127.0.0.1:8011
+```
+
+## One-command Local Start
+
+```powershell
+.\scripts\start-local.ps1
+```
+
+Or start services separately:
+
+```powershell
+.\scripts\start-backend.ps1
+.\scripts\start-frontend.ps1
+```
+
+## Local Verification
+
+Run from the project root:
+
+```powershell
+npm run check
+npm run check:ports
+npm run check:health
+npm run test:smoke
+```
+
+These commands verify fixed local ports, environment files, `VITE_API_BASE_URL`, backend `/health`, frontend reachability, and the frontend-to-backend health call.
 
 ## Phase Status
 

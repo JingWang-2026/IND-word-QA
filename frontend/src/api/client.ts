@@ -1,9 +1,21 @@
-import type { DocumentRecord, Project, ProjectDetail, QAIssue } from "../types/api";
+import type { DocumentRecord, HealthStatus, Project, ProjectDetail, QAIssue } from "../types/api";
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL ?? "http://127.0.0.1:8000";
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
+export function getApiBaseUrl() {
+  return API_BASE || "";
+}
+
+function requireApiBaseUrl() {
+  if (!API_BASE) {
+    throw new Error("VITE_API_BASE_URL is not configured. Check frontend/.env.local or frontend/.env.example.");
+  }
+  return API_BASE;
+}
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
-  const response = await fetch(`${API_BASE}${path}`, {
+  const apiBase = requireApiBaseUrl();
+  const response = await fetch(`${apiBase}${path}`, {
     headers: {
       "Content-Type": "application/json",
       ...init?.headers,
@@ -18,6 +30,7 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
 }
 
 export const api = {
+  health: () => request<HealthStatus>("/health"),
   listProjects: () => request<Project[]>("/api/projects"),
   createProject: (payload: { name: string; description?: string }) =>
     request<Project>("/api/projects", { method: "POST", body: JSON.stringify(payload) }),
@@ -26,7 +39,7 @@ export const api = {
   uploadDocument: async (projectId: string, file: File) => {
     const data = new FormData();
     data.append("file", file);
-    const response = await fetch(`${API_BASE}/api/projects/${projectId}/documents`, { method: "POST", body: data });
+    const response = await fetch(`${requireApiBaseUrl()}/api/projects/${projectId}/documents`, { method: "POST", body: data });
     if (!response.ok) throw new Error(await response.text());
     return response.json() as Promise<DocumentRecord>;
   },
@@ -44,6 +57,6 @@ export const api = {
   exportIssuesUrl: (projectId: string, filters: Record<string, string> = {}) => {
     const params = new URLSearchParams(Object.entries(filters).filter(([, value]) => value));
     const suffix = params.toString() ? `?${params}` : "";
-    return `${API_BASE}/api/projects/${projectId}/export/issues.xlsx${suffix}`;
+    return `${requireApiBaseUrl()}/api/projects/${projectId}/export/issues.xlsx${suffix}`;
   },
 };

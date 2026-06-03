@@ -7,6 +7,7 @@ import { ProjectListPage } from "./pages/ProjectListPage";
 import { ProjectDetailPage } from "./pages/ProjectDetailPage";
 import { IssueDetailPage } from "./pages/IssueDetailPage";
 import { IssueListPage } from "./pages/IssueListPage";
+import { StatusPage } from "./pages/StatusPage";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
             <Route path="/projects/:projectId" element={<ProjectDetailPage />} />
             <Route path="/projects/:projectId/issues" element={<IssueListPage />} />
             <Route path="/issues/:issueId" element={<IssueDetailPage />} />
+            <Route path="/status" element={<StatusPage />} />
           </Routes>
         </main>
       </div>

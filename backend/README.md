@@ -6,13 +6,20 @@ FastAPI backend for Word Report QA Assistant.
 
 ```powershell
 pip install -r requirements.txt
-uvicorn app.main:app --reload
+python -m uvicorn app.main:app --host 127.0.0.1 --port 8011
 ```
 
 Health check:
 
 ```powershell
-Invoke-WebRequest http://127.0.0.1:8000/health
+Invoke-WebRequest http://127.0.0.1:8011/health
+```
+
+Local environment defaults:
+
+```text
+WORD_QA_DATABASE_URL=sqlite:///./word_qa.db
+WORD_QA_FRONTEND_ORIGINS=http://localhost:5175,http://127.0.0.1:5175
 ```
 
 ## Tests
