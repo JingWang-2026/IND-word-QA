@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Plus } from "lucide-react";
 import { api } from "../api/client";
 import type { Project } from "../types/api";
 
 export function ProjectListPage() {
+  const navigate = useNavigate();
   const [projects, setProjects] = useState<Project[]>([]);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [creating, setCreating] = useState(false);
 
   async function loadProjects() {
     setLoading(true);
@@ -31,13 +33,17 @@ export function ProjectListPage() {
     event.preventDefault();
     if (!name.trim()) return;
     setError(null);
+    setCreating(true);
     try {
-      await api.createProject({ name: name.trim(), description: description.trim() || undefined });
+      const project = await api.createProject({ name: name.trim(), description: description.trim() || undefined });
       setName("");
       setDescription("");
       await loadProjects();
+      navigate(`/projects/${project.id}`);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to create project.");
+    } finally {
+      setCreating(false);
     }
   }
 
@@ -61,9 +67,9 @@ export function ProjectListPage() {
               onChange={(event) => setDescription(event.target.value)}
             />
           </label>
-          <button className="button-primary gap-2" type="submit">
+          <button className="button-primary gap-2" type="submit" disabled={creating || !name.trim()}>
             <Plus aria-hidden="true" className="h-4 w-4" />
-            Create project
+            {creating ? "Creating..." : "Create project"}
           </button>
         </form>
       </section>
